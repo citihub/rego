@@ -1,0 +1,5 @@
+conftest_verify:
+  image: citihub/build:latest
+  stage: test
+  script:
+    - conftest verify

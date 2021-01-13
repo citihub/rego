@@ -33,3 +33,16 @@ test_disabled_kube_dashboard {
         }]
     }
 }
+
+test_kube_dashboard_not_set {
+    no_violations with input as {
+        "resource_changes": [{
+            "type": "azurerm_kubernetes_cluster",
+            "change": {
+                "after": {
+                    "addon_profile": []
+                }
+            }
+        }]
+    }
+}

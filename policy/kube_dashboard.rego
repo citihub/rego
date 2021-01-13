@@ -6,12 +6,11 @@ azurerm_kubernetes_clusters := [resource |
 ]
 
 deny[msg] {
-
-    expected := 0
-    actual := count([res |
-       res := azurerm_kubernetes_clusters[_]
-       object.get(res.change.after.addon_profile[0], "kube_dashboard", [])[0].enabled
+    violations := count([res |
+       res := azurerm_kubernetes_clusters[_];
+       kdb := object.get( res.change.after.addon_profile[0], "kube_dashboard", [ {"enabled": false} ] )
+       kdb[0].enabled
     ])
-    expected != actual
+    violations > 0
     msg := "kubernetes dashboard should be disabled"
 }

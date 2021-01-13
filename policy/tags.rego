@@ -6,11 +6,10 @@ resource_changes := [ resource |
 
 # Every taggable resource must be tagged
 deny[msg] {
-    expected := 0
-    actual := [res.change.after.name |
+    violations := [res.change.after.name |
         res := resource_changes[_];
         res.change.after.tags == {}
     ]
-    expected != count(actual)
-    msg := sprintf("Expected %v untagged resources but found %v", [expected, count(actual)])
+    count(violations) > 0
+    msg := sprintf("Expected 0 untagged resources but found %v", [count(violations)])
 }

@@ -1,13 +1,13 @@
 package main
 
-name_length(resource_type, length_limit, field_name, default_field_name) = actual {
+name_length(resource_type, length_limit, field_name, default_field_name) = violations {
 
     resources := [ resource |
         resource := input.resource_changes[_]
         resource.type == resource_type
     ]
 
-    actual := [object.get(rg.change.after, field_name, object.get(rg.change.after, default_field_name, null)) |
+    violations := [object.get(rg.change.after, field_name, object.get(rg.change.after, default_field_name, null)) |
         rg := resources[_];
         not is_null(rg.change.after);
         count(object.get(rg.change.after, field_name, object.get(rg.change.after, default_field_name, null))) > length_limit
@@ -18,9 +18,9 @@ name_length(resource_type, length_limit, field_name, default_field_name) = actua
 {% for item in name_length_limits %}
 # Validate {{item.terraform_resource_name}} name length
 deny[msg] {
-    actual := name_length("{{item.terraform_resource_name}}", {{item.max_length}}, "{{item.terraform_field_name or 'name'}}", "name")
-    0 != count(actual)
-    msg = sprintf("{{item.terraform_resource_name}} limit is {{item.max_length}} characters, found %v violation(s) (%v)", [count(actual), concat(",", actual)])
+    violations := name_length("{{item.terraform_resource_name}}", {{item.max_length}}, "{{item.terraform_field_name or 'name'}}", "name")
+    count(violations) > 0
+    msg = sprintf("{{item.terraform_resource_name}} limit is {{item.max_length}} characters, found %v violation(s) (%v)", [count(violations), concat(",", violations)])
 }
 {% endfor %}
 {% endblock %}

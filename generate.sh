@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 pushd templates
-python name_length.py > ../policies/name_length.rego
+python name_length.py > ../policy/name_length.rego
 popd

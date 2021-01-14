@@ -16,7 +16,7 @@ deny[msg] {
 }
 
 
-is_safe(x) = true {
+is_kube_dashboard_explictly_disabled(x) = true {
 	aop := object.get(x, "addon_profile", [])
     count(aop) > 0
     kdb := object.get(aop[0], "kube_dashboard", [])
@@ -29,7 +29,8 @@ is_safe(x) = true {
 deny[msg] {
     unset_violations := count([res |
         res := azurerm_kubernetes_clusters[_];
-        not is_safe(res.change.after)
+        not is_kube_dashboard_explictly_disabled
+       (res.change.after)
     ])
     unset_violations > 0
     msg := "kubernetes dashboard should be explicitly disabled"

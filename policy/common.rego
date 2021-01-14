@@ -7,3 +7,7 @@ empty(value) {
 no_violations {
     empty(deny)
 }
+
+has_key(x, k) {
+    _ = x[k]
+}

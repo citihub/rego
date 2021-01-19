@@ -29,8 +29,7 @@ is_kube_dashboard_explictly_disabled(x) = true {
 deny[msg] {
     unset_violations := count([res |
         res := azurerm_kubernetes_clusters[_];
-        not is_kube_dashboard_explictly_disabled
-       (res.change.after)
+        not is_kube_dashboard_explictly_disabled(res.change.after)
     ])
     unset_violations > 0
     msg := "kubernetes dashboard should be explicitly disabled"

@@ -1,7 +1,7 @@
 package main
 
 test_missing_tags_taggable_resource {
-    deny["Expected 0 untagged resources but found 1"] with input as {
+    deny[`Expected 0 untagged resources but found 1 (["voluptate-hic-eos-ea-magni-et"])`] with input as {
         "resource_changes": [{
             "type": "azurerm_resource_group",
             "change": {

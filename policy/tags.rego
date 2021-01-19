@@ -11,5 +11,5 @@ deny[msg] {
         res.change.after.tags == {}
     ]
     count(violations) > 0
-    msg := sprintf("Expected 0 untagged resources but found %v", [count(violations)])
+    msg := sprintf("Expected 0 untagged resources but found %v (%v)", [count(violations), violations])
 }
